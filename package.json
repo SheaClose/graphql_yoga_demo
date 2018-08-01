@@ -1,0 +1,25 @@
+{
+  "name": "graphql_yoga_demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "react-scripts start"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "apollo-client-preset": "^1.0.8",
+    "axios": "^0.18.0",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "graphql-yoga": "^1.15.0",
+    "react": "^16.4.1",
+    "react-apollo": "^2.1.9",
+    "react-dom": "^16.4.1"
+  },
+  "devDependencies": {
+    "react-scripts": "1.1.4"
+  }
+}
