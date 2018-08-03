@@ -3,11 +3,21 @@ module.exports = {
     message() {
       return "Hello World!";
     },
-    people() {
+    async people(_, args, { app }) {
+      let people = await app.get("db").people.find();
+      console.log("people: ", people);
       return people;
     },
-    filteredPeople(_, { prop, val }) {
-      return people.filter(c => c[prop] === val);
+    filteredPeople: async (parent, { prop, val }, { app }) => {
+      let people = await app.get("db").people.find({ [prop]: val });
+      // return people.filter(c => c[prop] === val);
+      return people;
     }
   }
+  // Mutation: {
+  // addPerson: async (_, args) => {
+  //   console.log("args: ", args);
+  //   return [];
+  // }
+  // }
 };
