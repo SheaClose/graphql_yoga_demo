@@ -1,0 +1,13 @@
+type Query {
+  message: String
+  people: [Person]!
+  filteredPeople(prop: String, val: String): [Person]!
+}
+type Person {
+  first_name: String
+  last_name: String
+  email: String
+  gender: String
+  city: String
+  country: String
+}

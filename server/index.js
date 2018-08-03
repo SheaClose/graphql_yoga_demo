@@ -1,52 +1,104 @@
-const axios = require("axios");
+require("dotenv").config();
 const { GraphQLServer } = require("graphql-yoga");
-let people = [];
+const port = process.env.PORT || 3001;
+// const massive = require("massive");
+const session = require("express-session");
+// const { importSchema } = require("graphql-import");
+// const path = require("path");
+// const typeDefs = importSchema(path.join(__dirname + "/schema.graphql"));
 const typeDefs = `
-  type Query {
-    name: String,
-    people: [Person]
-    person(prop: String, val: String) :Person
-  }
-  type Person {
-    name: String
-    height: String,
-    mass: String,
-    hair_color: String,
-    skin_color: String,
-    eye_color: String,
-    birth_year: String,
-    gender: String,
-  }
+type Query {
+  message: String
+  people: [Person]!
+  filteredPeople(prop: String, val: String): [Person]!
+}
+type Person {
+  first_name: String
+  last_name: String
+  email: String
+  gender: String
+  city: String
+  country: String
+}
+type Mutation {
+  addPerson(first_name: String
+    last_name: String
+    email: String
+    gender: String
+    city: String
+    country: String): [Person]!
+}
 `;
 const resolvers = {
   Query: {
-    name() {
-      return "Shea close";
+    message() {
+      return "Hello World!";
     },
     people() {
       return people;
     },
-    person(_, { prop, val }) {
-      let person = people.find(c => c[prop] === val);
-      return person;
+    filteredPeople: (parent, { prop, val }, { session }) => {
+      console.log("{ prop, val }: ", { prop, val });
+      return people.filter(c => c[prop] === val);
+    }
+  },
+  Mutation: {
+    addPerson: async (_, args) => {
+      console.log("args: ", args);
+      return [];
+      // console.log("{ first_name, last_name, email, gender, city, country }: ", {
+      //   first_name,
+      //   last_name,
+      //   email,
+      //   gender,
+      //   city,
+      //   country
+      // });
+      // let people = await app.get("db").query(`
+      // insert into people (first_name, last_name, email, gender, city, country) values (
+      //   ${first_name},
+      //   ${last_name},
+      //   ${email},
+      //   ${gender},
+      //   ${city},
+      //   ${country}
+      // );
+      // select * from people;
+      // `);
+      // return people;
     }
   }
 };
 
 const server = new GraphQLServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: ({ request }) => request
 });
-
-server.start(({ port }) => console.log(`Listening on port ${port}`));
-
-(async () => {
-  let nextUrl = "https://swapi.co/api/people";
-  while (nextUrl) {
-    let {
-      data: { next, results }
-    } = await axios.get(nextUrl);
-    people.push(...results);
-    nextUrl = next;
+const app = server.express;
+const options = {
+  port,
+  endpoint: "/graphql",
+  subscriptions: "/subscriptions",
+  playground: "/playground",
+  cors: {
+    credentials: true,
+    origin: ["http://localhost:3000"]
   }
-})();
+};
+// massive(process.env.CONNECTION_STRING).then(db => {
+//   app.set("db", db);
+// });
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: true,
+    saveUninitialized: true
+  })
+);
+
+server.start(options, ({ port }) =>
+  console.log(
+    `Server started, listening on port ${port} for incoming requests.`
+  )
+);
