@@ -1,17 +1,22 @@
 type Query {
-  message: String
-  people: [Person]!
-  filteredPeople(prop: String, val: String): [Person]!
+  products(
+    id: Int
+    img_url: String
+    gender: String
+    category: String
+    title: String
+    desc: String
+    price: Int
+    sale: Boolean
+  ): [Product]!
 }
-type Person {
+type Product {
   id: Int
-  first_name: String
-  last_name: String
-  email: String
+  img_url: String
   gender: String
-  city: String
-  country: String
+  category: String
+  title: String
+  desc: String
+  price: Int
+  sale: Boolean
 }
-# type Mutation {
-# addPerson(name: String): [Person]!
-# }

@@ -1,23 +1,17 @@
 module.exports = {
   Query: {
-    message() {
-      return "Hello World!";
-    },
-    async people(_, args, { app }) {
-      let people = await app.get("db").people.find();
-      console.log("people: ", people);
-      return people;
-    },
-    filteredPeople: async (parent, { prop, val }, { app }) => {
-      let people = await app.get("db").people.find({ [prop]: val });
-      // return people.filter(c => c[prop] === val);
-      return people;
+    products(_, args, { app }) {
+      let hasQuery = Object.values(args).some(c => c);
+      let queryObj = hasQuery
+        ? ({ id, img_url, gender, category, title, desc, price, sale } = args)
+        : {};
+      return app
+        .get("db")
+        .products.find(queryObj)
+        .then(products => {
+          return products;
+        })
+        .catch(() => []);
     }
   }
-  // Mutation: {
-  // addPerson: async (_, args) => {
-  //   console.log("args: ", args);
-  //   return [];
-  // }
-  // }
 };
