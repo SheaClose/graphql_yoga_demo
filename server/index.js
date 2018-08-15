@@ -16,10 +16,8 @@ const server = new GraphQLServer({
 const app = server.express;
 
 (async () => {
-  await massive(process.env.CONNECTION_STRING).then(db => {
-    app.set("db", db);
-  });
-
+  let db = await massive(process.env.CONNECTION_STRING);
+  app.set("db", db);
   app.use(session(sessionOptions));
   server.start(graphqlOptions, ({ port }) =>
     console.log(

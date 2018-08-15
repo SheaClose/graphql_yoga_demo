@@ -4,7 +4,7 @@ type Query {
     img_url: String
     gender: String
     category: String
-    title: String
+    name: String
     desc: String
     price: Int
     sale: Boolean
@@ -15,8 +15,17 @@ type Product {
   img_url: String
   gender: String
   category: String
-  title: String
+  name: String
   desc: String
   price: Int
   sale: Boolean
+}
+type Cart {
+  id: Int
+  product_id: Int
+  user_id: String
+  quantity: Int
+}
+type Mutation {
+  addToCart(id: Int): [Cart]
 }

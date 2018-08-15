@@ -1,12 +1,21 @@
 import { gql } from "apollo-boost";
-export default {};
+export const ADD_TO_CART = gql`
+  mutation AddToCart($id: Int) {
+    addToCart(id: $id) {
+      id
+      product_id
+      user_id
+      quantity
+    }
+  }
+`;
 export const GET_PRODUCTS = gql`
   query(
     $id: Int
     $img_url: String
     $gender: String
     $category: String
-    $title: String
+    $name: String
     $desc: String
     $price: Int
     $sale: Boolean
@@ -16,7 +25,7 @@ export const GET_PRODUCTS = gql`
       img_url: $img_url
       gender: $gender
       category: $category
-      title: $title
+      name: $name
       desc: $desc
       price: $price
       sale: $sale
@@ -25,7 +34,7 @@ export const GET_PRODUCTS = gql`
       img_url
       gender
       category
-      title
+      name
       desc
       price
       sale
